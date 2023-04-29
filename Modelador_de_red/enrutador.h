@@ -14,6 +14,9 @@ public:
     Enrutador();
     map<string, int> getConexiones() const;
     void setConexiones(string, vector<string>);
+    void setConexiones(map<string, int>);
+    bool existeconexion(string, int*);
+    void enrutadorappend(string,int);
 
 };
 

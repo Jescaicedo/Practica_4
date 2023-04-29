@@ -35,6 +35,26 @@ void Enrutador::setConexiones(string linea, vector<string> enrutadores)
     conexiones=auxconex;
 
 }
+void Enrutador::setConexiones(map<string, int> Nc)
+{
+    conexiones=Nc;
+}
+
+bool Enrutador::existeconexion(string enr, int* c)
+{
+    if(conexiones.count(enr)>0){
+        *c=conexiones[enr];
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+void Enrutador::enrutadorappend(string enr,int c)
+{
+    conexiones[enr]=c;
+}
 
 Enrutador::Enrutador()
 {
