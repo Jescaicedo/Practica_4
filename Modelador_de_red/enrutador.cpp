@@ -56,6 +56,11 @@ void Enrutador::enrutadorappend(string enr,int c)
     conexiones[enr]=c;
 }
 
+void Enrutador::eliminarconexion(string conex)
+{
+    conexiones.erase(conex);
+}
+
 Enrutador::Enrutador()
 {
 

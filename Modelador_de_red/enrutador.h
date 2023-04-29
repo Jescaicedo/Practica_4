@@ -17,6 +17,7 @@ public:
     void setConexiones(map<string, int>);
     bool existeconexion(string, int*);
     void enrutadorappend(string,int);
+    void eliminarconexion(string);
 
 };
 

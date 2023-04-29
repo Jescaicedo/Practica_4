@@ -35,7 +35,7 @@ int main()
             agregarenrutador(red);
         }
         else if(mov==2){
-
+            eliminarenrutador(red);
         }
 
     }
@@ -150,8 +150,24 @@ void agregarenrutador(map<string,Enrutador>& red)
 
 void eliminarenrutador(map<string,Enrutador>& red)
 {
-    string enr;
+    string enr, auxe;
+    Enrutador enrutador;
     cout<<"Ingrese el nombre del enrutador: ";
     cin>>enr;
+    if(red.count(enr)>0){
+        red.erase(enr);
+        auto inicio = red.begin();
+        auto fin = red.end();
+        while (inicio != fin){
+            auxe=inicio->first;
+            enrutador=inicio->second;
+            enrutador.eliminarconexion(enr);
+            red[auxe]=enrutador;
+            inicio++;
+        }
+    }
+    else{
+        cout<<"El enrutador no existe"<<endl;
+    }
 
 }
