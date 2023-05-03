@@ -8,10 +8,15 @@ using namespace std;
 void desdearchivo(map<string,Enrutador>&);
 void agregarenrutador(map<string,Enrutador>&);
 void eliminarenrutador(map<string,Enrutador>&);
+void llenarvnenrutadores(map<string,Enrutador>, vector<vector<string>>&, vector<string>&);
+void llenarmccostos(vector<vector<int>>&, map<string,Enrutador>, vector<string>);
 
 int main()
 {
     int mov=0;
+    vector<vector<string>> mcnombre;
+    vector<vector<int>> mccostos;
+    vector<string> nombrese;
     cout<<"Bienvenido al modelador de red"<<endl;
     bool ban=true;
     map<string,Enrutador> red;
@@ -25,7 +30,7 @@ int main()
         desdearchivo(red);
     }
     while(ban){
-        cout<<"Ingrese 1 para agregar enrutadores"<<endl<<"2 para eliminar enrutador"<<endl<<"3 para cerrar programa: ";
+        cout<<"Ingrese: "<<endl<<"1. para agregar enrutadores"<<endl<<"2. para eliminar enrutador"<<endl<<"3. para saber cual es el costo de un enrutador a otro: ";
         cin>>mov;
         while(mov<1 || mov>3){
             cout<<"Ingrese un movimiento valido: ";
@@ -36,6 +41,10 @@ int main()
         }
         else if(mov==2){
             eliminarenrutador(red);
+        }
+        else if(mov==3){
+            llenarvnenrutadores(red,mcnombre, nombrese);
+            llenarmccostos(mccostos,red,nombrese);
         }
 
     }
@@ -112,7 +121,7 @@ void agregarenrutador(map<string,Enrutador>& red)
                 else{
                     cout<<"Ingrese el costo de la conexion: ";
                     cin>>costo;
-                    while(costo<0){
+                    while(costo<=0){
                         cout<<"Ingrese un costo valido: ";
                         cin>>costo;
                     }
@@ -123,7 +132,7 @@ void agregarenrutador(map<string,Enrutador>& red)
             else{
                 cout<<"Ingrese el costo de la conexion: ";
                 cin>>costo;
-                while(costo<0){
+                while(costo<=0){
                     cout<<"Ingrese un costo valido: ";
                     cin>>costo;
                 }
@@ -170,4 +179,34 @@ void eliminarenrutador(map<string,Enrutador>& red)
         cout<<"El enrutador no existe"<<endl;
     }
 
+}
+
+void llenarvnenrutadores(map<string,Enrutador> red , vector<vector<string>>& mcn, vector<string>& nombres)
+{
+    string enr;
+    auto inicio = red.begin();
+    auto fin = red.end();
+    while (inicio != fin){
+        enr=inicio->first;
+        nombres.push_back(enr);
+        inicio++;
+    }
+    int lim=nombres.size();
+    for(int i=0; i<lim; i++){
+        mcn.push_back(nombres);
+    }
+}
+
+void llenarmccostos(vector<vector<int>>& mccostos, map<string,Enrutador> red, vector<string>nombres)
+{
+    Enrutador enrutador;
+    vector<int> costos;
+    auto inicio = red.begin();
+    auto fin = red.end();
+    while (inicio != fin){
+        enrutador=inicio->second;
+        costos=enrutador.retornarcostosmc(nombres);
+        mccostos.push_back(costos);
+        inicio++;
+    }
 }

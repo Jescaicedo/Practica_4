@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <vector>
+
 using namespace std;
 
 class Enrutador
@@ -18,7 +19,7 @@ public:
     bool existeconexion(string, int*);
     void enrutadorappend(string,int);
     void eliminarconexion(string);
-
+    vector<int> retornarcostosmc(vector<string>);
 };
 
 #endif // ENRUTADOR_H
