@@ -10,6 +10,7 @@ void agregarenrutador(map<string,Enrutador>&);
 void eliminarenrutador(map<string,Enrutador>&);
 void llenarvnenrutadores(map<string,Enrutador>, vector<vector<string>>&, vector<string>&);
 void llenarmccostos(vector<vector<int>>&, map<string,Enrutador>, vector<string>);
+void algfloydwarshall(vector<vector<int>>&, vector<vector<string>>&);
 
 int main()
 {
@@ -45,6 +46,7 @@ int main()
         else if(mov==3){
             llenarvnenrutadores(red,mcnombre, nombrese);
             llenarmccostos(mccostos,red,nombrese);
+            algfloydwarshall(mccostos,mcnombre);
         }
 
     }
@@ -209,4 +211,31 @@ void llenarmccostos(vector<vector<int>>& mccostos, map<string,Enrutador> red, ve
         mccostos.push_back(costos);
         inicio++;
     }
+}
+void algfloydwarshall(vector<vector<int>>& costos, vector<vector<string>>& Nombres)
+{
+    int contp=0, lim=costos.size(), conts=0, num1=0, num2, aux=1;
+    while(contp<lim){
+        conts=0;
+        if(contp==conts){
+            conts+=1;
+        }
+        while(aux<lim){
+            while(conts<lim){
+                num1=costos[contp][conts];
+                num2=costos[aux][contp];
+                if(num1!=0 && num2!=0 && aux!=conts){
+                    if(costos[aux][conts]==0 || num1+num2<costos[aux][conts]){
+                        costos[aux][conts]=num1+num2;
+                    }
+                }
+                conts+=1;
+            }
+            aux+=1;
+            conts=0;
+        }
+        aux=0;
+        contp+=1;
+    }
+
 }
