@@ -11,6 +11,9 @@ void eliminarenrutador(map<string,Enrutador>&);
 void llenarvnenrutadores(map<string,Enrutador>, vector<vector<string>>&, vector<string>&);
 void llenarmccostos(vector<vector<int>>&, map<string,Enrutador>, vector<string>);
 void algfloydwarshall(vector<vector<int>>&, vector<vector<string>>&);
+void encontrarcostos(vector<string>, vector<vector<int>>);
+void encontrarcamino(vector<string>,vector<vector<string>>, vector<vector<int>>);
+
 
 int main()
 {
@@ -31,9 +34,9 @@ int main()
         desdearchivo(red);
     }
     while(ban){
-        cout<<"Ingrese: "<<endl<<"1. para agregar enrutadores"<<endl<<"2. para eliminar enrutador"<<endl<<"3. para saber cual es el costo de un enrutador a otro: ";
+        cout<<"Ingrese: "<<endl<<"1. para agregar enrutadores"<<endl<<"2. para eliminar enrutador"<<endl<<"3. para saber cual es el costo de un enrutador a otro"<<endl<<"4. para saber el camino mas eficiente de un enrutador a otro"<<endl<<"5. para cerrar el programa: ";
         cin>>mov;
-        while(mov<1 || mov>3){
+        while(mov<1 || mov>5){
             cout<<"Ingrese un movimiento valido: ";
             cin>>mov;
         }
@@ -43,10 +46,22 @@ int main()
         else if(mov==2){
             eliminarenrutador(red);
         }
-        else if(mov==3){
+        else if(mov==3 || mov==4){
             llenarvnenrutadores(red,mcnombre, nombrese);
             llenarmccostos(mccostos,red,nombrese);
             algfloydwarshall(mccostos,mcnombre);
+            if(mov==3){
+                encontrarcostos(nombrese,mccostos);
+            }
+            else{
+                encontrarcamino(nombrese,mcnombre, mccostos);
+            }
+            mccostos.clear();
+            mcnombre.clear();
+            nombrese.clear();
+        }
+        else{
+            ban=false;
         }
 
     }
@@ -227,6 +242,7 @@ void algfloydwarshall(vector<vector<int>>& costos, vector<vector<string>>& Nombr
                 if(num1!=0 && num2!=0 && aux!=conts){
                     if(costos[aux][conts]==0 || num1+num2<costos[aux][conts]){
                         costos[aux][conts]=num1+num2;
+                        Nombres[aux][conts]=Nombres[contp][contp];
                     }
                 }
                 conts+=1;
@@ -236,6 +252,152 @@ void algfloydwarshall(vector<vector<int>>& costos, vector<vector<string>>& Nombr
         }
         aux=0;
         contp+=1;
+    }
+
+}
+
+void encontrarcostos(vector<string> enr, vector<vector<int>> costos)
+{
+    bool ban=true;
+    int lim= enr.size(), conte=0, contr=0, costo=0;
+    string nome, nomr;
+    cout<<"Ingrese el nombre del enrutador emisor: ";
+    cin>>nome;
+    for(int i=0; i<lim; i++){
+        if(enr[i]==nome){
+            ban=false;
+            conte=i;
+        }
+    }
+    while(ban){
+        cout<<"El enrutador no existe"<<endl;
+        cout<<"Ingrese un nombre valido: ";
+        cin>>nome;
+        for(int i=0; i<lim; i++){
+            if(enr[i]==nome){
+                ban=false;
+                conte=i;
+            }
+        }
+    }
+    cout<<"Ingrese el nombre del enrutador receptor: ";
+    cin>>nomr;
+    ban=true;
+    if(nomr!=nome){
+        for(int i=0; i<lim; i++){
+            if(enr[i]==nomr){
+                ban=false;
+                contr=i;
+            }
+        }
+    }
+    while(ban){
+        if(nomr==nome){
+            cout<<"No se puede enviar informacion de un enrutador a si mismo"<<endl;
+        }
+        else{
+            cout<<"El enrutador no existe"<<endl;
+        }
+        cout<<"Ingrese un nombre valido: ";
+        cin>>nomr;
+        if(nomr!=nome){
+            for(int i=0; i<lim; i++){
+                if(enr[i]==nomr){
+                    ban=false;
+                    contr=i;
+                }
+            }
+        }
+    }
+    if(costos[conte][contr]!=0){
+        costo=costos[conte][contr];
+        cout<<"El costo de enviar del enrutador "<<nome<<" a "<<nomr<<" es de "<<costo<<endl;
+    }
+    else{
+        cout<<"No existe conxion con el enrutador"<<endl;
+    }
+}
+
+void encontrarcamino(vector<string> enr,vector<vector<string>> caminos, vector<vector<int>> costos)
+{
+    bool ban=true;
+    vector<string> cam;
+    int lim= enr.size(), conte=0, contr=0, cont=0;
+    string nome, nomr, auxc, aux2;
+    cout<<"Ingrese el nombre del enrutador emisor: ";
+    cin>>nome;
+    for(int i=0; i<lim; i++){
+        if(enr[i]==nome){
+            ban=false;
+            conte=i;
+        }
+    }
+    while(ban){
+        cout<<"El enrutador no existe"<<endl;
+        cout<<"Ingrese un nombre valido: ";
+        cin>>nome;
+        for(int i=0; i<lim; i++){
+            if(enr[i]==nome){
+                ban=false;
+                conte=i;
+            }
+        }
+    }
+    cout<<"Ingrese el nombre del enrutador receptor: ";
+    cin>>nomr;
+    ban=true;
+    if(nomr!=nome){
+        for(int i=0; i<lim; i++){
+            if(enr[i]==nomr){
+                ban=false;
+                contr=i;
+            }
+        }
+    }
+    while(ban){
+        if(nomr==nome){
+            cout<<"No se puede enviar informacion de un enrutador a si mismo"<<endl;
+        }
+        else{
+            cout<<"El enrutador no existe"<<endl;
+        }
+        cout<<"Ingrese un nombre valido: ";
+        cin>>nomr;
+        if(nomr!=nome){
+            for(int i=0; i<lim; i++){
+                if(enr[i]==nomr){
+                    ban=false;
+                    contr=i;
+                }
+            }
+        }
+    }
+    if(costos[conte][contr]!=0){
+        auxc=caminos[conte][contr];
+        cam.push_back(nomr);
+        aux2=nomr;
+        while(auxc!=aux2){
+            cam.insert(cam.begin(), auxc);
+            for(int i=0; i<lim; i++){
+                if(enr[i]==auxc){
+                    contr=i;
+                }
+            }
+            aux2=auxc;
+            auxc=caminos[conte][contr];
+        }
+        cam.insert(cam.begin(), nome);
+        cout<<"El camino que se debe recorrer es: "<<endl;
+        cout<<cam[cont];
+        lim=cam.size();
+        while(cont<lim-1){
+            cont+=1;
+            cout<<"->"<<cam[cont];
+        }
+        cout<<endl;
+    }
+    else{
+        cout<<"No existe conexion con este enrutador"<<endl;
     }
 
 }
